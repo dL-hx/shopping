@@ -1,0 +1,12 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+code/node_modules
+code/.pnp
+.pnp.js
+
+# testing
+code/coverage
+
+# production
+code/build
