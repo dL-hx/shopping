@@ -1,11 +1,22 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
+import * as cartActions from "./../store/actions/cart.action";
 
 
 class CartTable extends Component {
+  componentDidMount() {
+    // 1. 调用获取数据
+    const { loadCartList } = this.props;
+    
+    loadCartList();
+  }
+
+
+
   render() {
-    // console.log(this.props.cart);
+    const  { cartList , total }= this.props
+    console.log(cartList);
     return (
       <div>
       <section className="container content-section">
@@ -16,48 +27,36 @@ class CartTable extends Component {
           <span className="cart-quantity cart-header cart-column">数量</span>
         </div>
         <div className="cart-items">
-          <div className="cart-row">
-            <div className="cart-item cart-column">
-              <img
-                className="cart-item-image"
-                src="images/01.webp"
-                width="100"
-                height="100"
-              />
-              <span className="cart-item-title">
-                小户型简约现代网红双人三人客厅科技布免洗布艺
-              </span>
+          {
+            cartList.map((item) => {
+              return    <div className="cart-row" key={item.id}>
+              <div className="cart-item cart-column">
+                <img
+                  className="cart-item-image"
+                  src={item.thumbnail}
+                  width="100"
+                  height="100"
+                />
+                <span className="cart-item-title">
+                  {item.title}
+                </span>
+              </div>
+              <span className="cart-price cart-column">￥{item.price}</span>
+              <div className="cart-quantity cart-column">
+                <input className="cart-quantity-input" type="number" defaultValue={item.count}/>
+                <button className="btn btn-danger" type="button">
+                  删除
+                </button>
+              </div>
             </div>
-            <span className="cart-price cart-column">￥1020</span>
-            <div className="cart-quantity cart-column">
-              <input className="cart-quantity-input" type="number" />
-              <button className="btn btn-danger" type="button">
-                删除
-              </button>
-            </div>
-          </div>
-          <div className="cart-row">
-            <div className="cart-item cart-column">
-              <img
-                className="cart-item-image"
-                src="images/02.webp"
-                width="100"
-                height="100"
-              />
-              <span className="cart-item-title">11全网通4G手机官方iPhonexr</span>
-            </div>
-            <span className="cart-price cart-column">￥4758</span>
-            <div className="cart-quantity cart-column">
-              <input className="cart-quantity-input" type="number" />
-              <button className="btn btn-danger" type="button">
-                删除
-              </button>
-            </div>
-          </div>
+            })
+          }
+       
+        
         </div>
         <div className="cart-total">
           <strong className="cart-total-title">总价</strong>
-          <span className="cart-total-price">￥39.97</span>
+          <span className="cart-total-price">￥{total}</span>
         </div>
       </section>
       <br />
@@ -71,15 +70,23 @@ class CartTable extends Component {
 
 
 const mapStateToProps = (state) => {
+  const cartList = state.cart.cartList
+
+  let total = 0 // 总价格
+  total = cartList.reduce((prev,curr) => {
+    return prev +  Number(curr.price)*Number(curr.count)
+  },0)
+
   return {
-    cart: state.cart,
+    cartList:cartList,
+    total: total,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatch,
-  };
+  // 用于生成函数
+  return { ...bindActionCreators(cartActions, dispatch) };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartTable);

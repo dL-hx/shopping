@@ -10,7 +10,7 @@ class ProductList extends Component {
     loadProducts();
   }
   render() {
-    const { product } = this.props;
+    const { product,addCart } = this.props;
     return (
       <div>
         <section className="container content-section">
@@ -26,6 +26,7 @@ class ProductList extends Component {
                     <button
                       className="btn btn-primary shop-item-button"
                       type="button"
+                      onClick={()=>addCart()}
                     >
                       加入购物车
                     </button>
