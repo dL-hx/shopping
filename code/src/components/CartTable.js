@@ -1,11 +1,13 @@
-import React from "react";
+import React, { Component } from 'react'
 import { connect } from "react-redux";
 
-function CartTable({cart}) {
-    console.log(cart);
-    
-  return (
-    <div>
+
+
+class CartTable extends Component {
+  render() {
+    // console.log(this.props.cart);
+    return (
+      <div>
       <section className="container content-section">
         <h2 className="section-header">购物车</h2>
         <div className="cart-row">
@@ -61,8 +63,12 @@ function CartTable({cart}) {
       <br />
       <br />
     </div>
-  );
+    )
+  }
 }
+
+
+
 
 const mapStateToProps = (state) => {
   return {
